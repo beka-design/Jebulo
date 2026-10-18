@@ -1,0 +1,37 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.admin == true ||
+        request.auth.token.role == 'admin'
+      );
+    }
+    
+    function isCreator() {
+      return isAuthenticated() && (
+        request.auth.token.creator == true ||
+        isAdmin()
+      );
+    }
+
+    // Public previews, thumbnails, and cover assets
+    match /public/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated() && request.resource.size < 50 * 1024 * 1024; // 50MB max for previews
+    }
+
+    // Protected paid digital product packages
+    // Direct public read is strictly DENIED. Access must be via signed download URLs.
+    match /protected/{allPaths=**} {
+      allow read: if false; // strictly blocked from client reads!
+      allow write: if (isCreator() || isAdmin()) && request.resource.size < 250 * 1024 * 1024; // 250MB max
+    }
+  }
+}

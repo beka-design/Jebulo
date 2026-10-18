@@ -1,0 +1,153 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.admin == true ||
+        request.auth.token.role == 'admin' ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
+    }
+
+    function isCreator() {
+      return isAuthenticated() && (
+        request.auth.token.creator == true ||
+        isAdmin() ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'creator'
+      );
+    }
+
+    // Users collection
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isOwner(userId) && request.resource.data.role == 'buyer';
+      allow update: if isOwner(userId) 
+                    && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'status'])
+                    || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Dynamic Categories
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Products collection
+    match /products/{productId} {
+      allow read: if resource.data.status == 'APPROVED' 
+                  || (isAuthenticated() && resource.data.creatorId == request.auth.uid)
+                  || isAdmin();
+
+      // Creators can create drafts
+      allow create: if isCreator() 
+                    && request.resource.data.creatorId == request.auth.uid
+                    && request.resource.data.status in ['DRAFT', 'PENDING_REVIEW'];
+
+      // Creators can update their drafts, but cannot mark them APPROVED
+      allow update: if (isCreator() && resource.data.creatorId == request.auth.uid 
+                        && request.resource.data.status in ['DRAFT', 'PENDING_REVIEW']
+                        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['salesCount', 'ratingAverage', 'ratingCount', 'approvedBy', 'approvedAt']))
+                    || isAdmin();
+
+      allow delete: if (isCreator() && resource.data.creatorId == request.auth.uid && resource.data.status == 'DRAFT')
+                    || isAdmin();
+    }
+
+    // Orders
+    match /orders/{orderId} {
+      allow read: if isAuthenticated() && (resource.data.buyerId == request.auth.uid || resource.data.creatorId == request.auth.uid || isAdmin());
+      // Buyers can initialize order in PENDING_PAYMENT
+      allow create: if isAuthenticated() 
+                    && request.resource.data.buyerId == request.auth.uid
+                    && request.resource.data.status in ['CREATED', 'PENDING_PAYMENT'];
+      // Status updates to PAID must be performed by server functions or admin
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Purchases (Entitlements)
+    match /purchases/{purchaseId} {
+      allow read: if isAuthenticated() && (resource.data.buyerId == request.auth.uid || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    // Reviews
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isAuthenticated() && request.resource.data.buyerId == request.auth.uid;
+      allow update, delete: if (isAuthenticated() && resource.data.buyerId == request.auth.uid) || isAdmin();
+    }
+
+    // Favorites
+    match /favorites/{favoriteId} {
+      allow read, write: if isAuthenticated() && request.auth.uid == request.resource.data.userId;
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    // Creator Applications
+    match /creatorApplications/{appId} {
+      allow read: if (isAuthenticated() && resource.data.userId == request.auth.uid) || isAdmin();
+      allow create: if isAuthenticated() 
+                    && request.resource.data.userId == request.auth.uid 
+                    && request.resource.data.status == 'pending';
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Creators public/store profile
+    match /creators/{creatorId} {
+      allow read: if true;
+      allow create, update: if (isAuthenticated() && request.auth.uid == creatorId && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['isVerified', 'totalSalesCount'])) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Creator Ledger (strictly server/admin writable)
+    match /creatorLedger/{ledgerId} {
+      allow read: if (isAuthenticated() && resource.data.creatorId == request.auth.uid) || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Creator Balances (strictly server/admin writable)
+    match /creatorBalances/{balanceId} {
+      allow read: if (isAuthenticated() && balanceId == request.auth.uid) || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Payout Requests
+    match /payoutRequests/{requestId} {
+      allow read: if (isAuthenticated() && resource.data.creatorId == request.auth.uid) || isAdmin();
+      allow create: if isCreator() && request.resource.data.creatorId == request.auth.uid && request.resource.data.status == 'REQUESTED';
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Reports
+    match /reports/{reportId} {
+      allow create: if isAuthenticated() && request.resource.data.reporterId == request.auth.uid;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Settings
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Admin Audit Logs
+    match /adminAuditLogs/{logId} {
+      allow read, write: if isAdmin();
+    }
+  }
+}
