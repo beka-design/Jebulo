@@ -23,7 +23,7 @@ import {
 
 export const creatorService = {
   /**
-   * Submit application to sell on GIZAY
+   * Submit application to sell on JEBULO
    */
   async submitApplication(
     data: Omit<CreatorApplication, 'id' | 'status' | 'createdAt' | 'updatedAt'>

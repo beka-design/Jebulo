@@ -18,12 +18,12 @@ export const PolicyPage: React.FC = () => {
             <div className="space-y-4 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               <h2 className="text-lg font-bold text-slate-900 dark:text-white">1. Introduction</h2>
               <p>
-                Welcome to <strong>GIZAY (ግዛኝ)</strong>, an Ethiopian digital marketplace platform connecting independent creators and purchasers of legitimate digital products and intellectual assets.
+                Welcome to <strong>JEBULO (ጀቡሎ)</strong>, an Ethiopian digital marketplace platform connecting independent creators and purchasers of legitimate digital products and intellectual assets.
               </p>
 
               <h2 className="text-lg font-bold text-slate-900 dark:text-white">2. Eligibility & Accounts</h2>
               <p>
-                You must provide accurate registration details. You are responsible for safeguarding your credentials. GIZAY reserves the right to suspend accounts that engage in fraudulent behavior, impersonation, or copyright violations.
+                You must provide accurate registration details. You are responsible for safeguarding your credentials. JEBULO reserves the right to suspend accounts that engage in fraudulent behavior, impersonation, or copyright violations.
               </p>
 
               <h2 className="text-lg font-bold text-slate-900 dark:text-white">3. Currency & Pricing</h2>
@@ -50,7 +50,7 @@ export const PolicyPage: React.FC = () => {
             <div className="space-y-4 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               <h2 className="text-lg font-bold text-slate-900 dark:text-white">1. Information We Collect</h2>
               <p>
-                We collect your account email, display name, preferred language, transaction history, and creator payout account numbers (Telebirr or CBE). We never collect or store payment card details on GIZAY servers; all payment card details are handled directly by Chapa.
+                We collect your account email, display name, preferred language, transaction history, and creator payout account numbers (Telebirr or CBE). We never collect or store payment card details on JEBULO servers; all payment card details are handled directly by Chapa.
               </p>
 
               <h2 className="text-lg font-bold text-slate-900 dark:text-white">2. How Information is Used</h2>
@@ -87,7 +87,7 @@ export const PolicyPage: React.FC = () => {
 
               <h2 className="text-lg font-bold text-slate-900 dark:text-white">3. Filing a Claim</h2>
               <p>
-                To request a refund review, contact support@gizay.com with your unique transaction reference (e.g., GIZAY-12345) within 7 days of purchase.
+                To request a refund review, contact support@jebulo.com with your unique transaction reference (e.g., JEBULO-12345) within 7 days of purchase.
               </p>
             </div>
           </div>
@@ -115,7 +115,7 @@ export const PolicyPage: React.FC = () => {
 
               <h2 className="text-lg font-bold text-slate-900 dark:text-white">1. Copyright Warranty</h2>
               <p>
-                By publishing on GIZAY, you represent and warrant that you own all copyrights or possess explicit legal authorization to license and distribute the content. Uploading pirated, cracked, or unauthorized material results in immediate account termination.
+                By publishing on JEBULO, you represent and warrant that you own all copyrights or possess explicit legal authorization to license and distribute the content. Uploading pirated, cracked, or unauthorized material results in immediate account termination.
               </p>
 
               <h2 className="text-lg font-bold text-slate-900 dark:text-white">2. Manual Payouts via Telebirr & CBE</h2>

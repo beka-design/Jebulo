@@ -15,11 +15,11 @@ export const Footer: React.FC = () => {
           <div className="lg:col-span-2 space-y-4">
             <Link to="/" className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-700 to-emerald-950 flex items-center justify-center shadow-lg shadow-emerald-950/50">
-                <span className="text-amber-400 font-extrabold text-xl">G</span>
+                <span className="text-amber-400 font-extrabold text-xl">J</span>
               </div>
               <div className="flex flex-col">
-                <span className="font-extrabold text-2xl tracking-tight text-white">GIZAY</span>
-                <span className="text-xs font-semibold text-amber-400 tracking-wider">ግዛኝ</span>
+                <span className="font-extrabold text-2xl tracking-tight text-white">JEBULO</span>
+                <span className="text-xs font-semibold text-amber-400 tracking-wider">ጀቡሎ</span>
               </div>
             </Link>
             <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
@@ -138,7 +138,7 @@ export const Footer: React.FC = () => {
         {/* Bottom bar */}
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>
-            &copy; {new Date().getFullYear()} GIZAY. {t('footer.allRightsReserved')}
+            &copy; {new Date().getFullYear()} JEBULO. {t('footer.allRightsReserved')}
           </p>
           <div className="flex items-center gap-1">
             <span>{t('footer.madeWithLove')}</span>

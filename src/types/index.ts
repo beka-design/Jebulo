@@ -1,5 +1,5 @@
 /**
- * GIZAY - Ethiopian Digital Product Marketplace
+ * JEBULO - Ethiopian Digital Product Marketplace
  * Core Domain Models & Type Definitions
  */
 

@@ -45,14 +45,14 @@ export const Navbar: React.FC = () => {
           {/* Brand Logo & Name */}
           <Link to="/" className="flex items-center gap-3 shrink-0 group">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-800 to-emerald-950 flex items-center justify-center shadow-md shadow-emerald-900/20 group-hover:scale-105 transition-transform">
-              <span className="text-amber-400 font-extrabold text-xl tracking-tight">G</span>
+              <span className="text-amber-400 font-extrabold text-xl tracking-tight">J</span>
             </div>
             <div className="flex flex-col">
               <span className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
-                GIZAY
+                JEBULO
               </span>
               <span className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 -mt-1 tracking-wider uppercase">
-                ግዛኝ
+                ጀቡሎ
               </span>
             </div>
           </Link>

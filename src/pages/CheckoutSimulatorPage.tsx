@@ -34,7 +34,7 @@ export const CheckoutSimulatorPage: React.FC = () => {
             Chapa Checkout Simulation
           </h2>
           <p className="text-xs text-slate-500">
-            Simulate payment verification for GIZAY Marketplace order.
+            Simulate payment verification for JEBULO Marketplace order.
           </p>
         </div>
 

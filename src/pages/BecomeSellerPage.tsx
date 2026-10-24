@@ -332,7 +332,7 @@ export const BecomeSellerPage: React.FC = () => {
               className="mt-1 w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500"
             />
             <span className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-              I certify that I hold all necessary copyrights, intellectual property licenses, and distribution rights for any digital products I upload to GIZAY. I agree that fraudulent or copyrighted content will result in immediate suspension and forfeiture of earnings.
+              I certify that I hold all necessary copyrights, intellectual property licenses, and distribution rights for any digital products I upload to JEBULO. I agree that fraudulent or copyrighted content will result in immediate suspension and forfeiture of earnings.
             </span>
           </label>
         </div>

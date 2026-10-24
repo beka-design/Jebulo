@@ -3,7 +3,7 @@ import { en } from '../locales/en';
 import { am } from '../locales/am';
 import { INITIAL_CATEGORIES } from '../services/marketplaceService';
 
-describe('GIZAY Marketplace Core Business Logic', () => {
+describe('JEBULO Marketplace Core Business Logic', () => {
   
   describe('12% Commission & Financial Accounting', () => {
     const COMMISSION_RATE = 0.12;
@@ -71,11 +71,11 @@ describe('GIZAY Marketplace Core Business Logic', () => {
       expect(amSections).toEqual(expect.arrayContaining(enSections));
     });
 
-    it('contains brand name GIZAY and Ethiopian root references in both dictionaries', () => {
-      expect(en.common.brandName).toBe('GIZAY');
-      expect(am.common.brandName).toBe('GIZAY');
-      expect(en.common.brandEthiopicTagline).toContain('ግዛኝ');
-      expect(am.common.brandEthiopicTagline).toContain('ግዛኝ');
+    it('contains brand name JEBULO and Ethiopian root references in both dictionaries', () => {
+      expect(en.common.brandName).toBe('JEBULO');
+      expect(am.common.brandName).toBe('JEBULO');
+      expect(en.common.brandEthiopicTagline).toContain('ጀቡሎ');
+      expect(am.common.brandEthiopicTagline).toContain('ጀቡሎ');
       expect(en.common.currency).toBe('ETB');
     });
   });

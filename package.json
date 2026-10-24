@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "GIZAY - Ethiopian Digital Product Marketplace. Everything Digital. One Marketplace.",
+  "description": "JEBULO - Ethiopian Digital Product Marketplace. Everything Digital. One Marketplace.",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

@@ -1,8 +1,8 @@
 export const en = {
   common: {
-    brandName: 'GIZAY',
+    brandName: 'JEBULO',
     brandTagline: 'Everything Digital. One Marketplace.',
-    brandEthiopicTagline: 'ግዛኝ - የኢትዮጵያ ዲጂታል ምርቶች መገበያያ',
+    brandEthiopicTagline: 'ጀቡሎ - የኢትዮጵያ ዲጂታል ምርቶች መገበያያ',
     home: 'Home',
     explore: 'Explore',
     categories: 'Categories',
@@ -103,7 +103,7 @@ export const en = {
     fileSize: 'File Size',
     fileType: 'File Format',
     instantDelivery: 'Instant Digital Delivery',
-    safeSecure: 'Protected Download via GIZAY Server',
+    safeSecure: 'Protected Download via JEBULO Server',
     description: 'Description',
     preview: 'Product Previews',
     customerReviews: 'Customer Reviews',
@@ -130,7 +130,7 @@ export const en = {
     viewLibrary: 'Go to My Library',
   },
   creator: {
-    applyTitle: 'Sell Your Digital Creations on GIZAY',
+    applyTitle: 'Sell Your Digital Creations on JEBULO',
     applySubtitle: 'Join Ethiopia’s growing creator economy. Keep 88% of your sales earnings, deposited to your Telebirr or CBE account.',
     applyBrandName: 'Creator / Brand Name',
     applyPayoutMethod: 'Payout Method',
@@ -168,7 +168,7 @@ export const en = {
     uploadPreviews: 'Upload Public Previews (Screenshots/Audio)',
   },
   admin: {
-    panelTitle: 'GIZAY Administration Portal',
+    panelTitle: 'JEBULO Administration Portal',
     navProducts: 'Products Review',
     navCreators: 'Creator Applications',
     navCategories: 'Manage Categories',
@@ -188,8 +188,8 @@ export const en = {
     markPaid: 'Confirm Payment Sent',
   },
   auth: {
-    signInTitle: 'Sign in to GIZAY',
-    signUpTitle: 'Create your GIZAY Account',
+    signInTitle: 'Sign in to JEBULO',
+    signUpTitle: 'Create your JEBULO Account',
     emailLabel: 'Email Address',
     passwordLabel: 'Password',
     displayNameLabel: 'Full Name',
@@ -200,7 +200,7 @@ export const en = {
     signingUp: 'Creating account...',
   },
   footer: {
-    about: 'GIZAY (ግዛኝ) is an open Ethiopian digital products marketplace empowering creators to sell digital assets, knowledge, and tools to customers worldwide.',
+    about: 'JEBULO (ጀቡሎ) is an open Ethiopian digital products marketplace empowering creators to sell digital assets, knowledge, and tools to customers worldwide.',
     quickLinks: 'Quick Links',
     creatorLinks: 'Creators',
     legalLinks: 'Legal & Security',

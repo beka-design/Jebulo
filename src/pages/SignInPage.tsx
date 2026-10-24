@@ -58,7 +58,7 @@ export const SignInPage: React.FC = () => {
             {t('auth.signInTitle')}
           </h1>
           <p className="text-xs text-slate-500">
-            Access your GIZAY library, orders, and creator studio.
+            Access your JEBULO library, orders, and creator studio.
           </p>
         </div>
 

@@ -69,7 +69,7 @@ export const CheckoutPage: React.FC = () => {
         product,
         buyerId: currentUser.uid,
         buyerEmail: currentUser.email || '',
-        buyerName: userProfile?.displayName || currentUser.displayName || 'GIZAY Buyer',
+        buyerName: userProfile?.displayName || currentUser.displayName || 'JEBULO Buyer',
       });
 
       // Redirect to Chapa checkout or local simulator
@@ -210,7 +210,7 @@ export const CheckoutPage: React.FC = () => {
           </Button>
 
           <p className="text-[11px] text-center text-slate-400">
-            Encrypted with 256-bit SSL. GIZAY never stores card or bank credentials.
+            Encrypted with 256-bit SSL. JEBULO never stores card or bank credentials.
           </p>
         </div>
 

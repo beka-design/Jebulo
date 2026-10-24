@@ -210,7 +210,7 @@ export const HomePage: React.FC = () => {
                 {t('products.featured')}
               </h2>
               <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                Top rated and most popular digital resources on GIZAY.
+                Top rated and most popular digital resources on JEBULO.
               </p>
             </div>
           </div>

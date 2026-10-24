@@ -31,7 +31,7 @@ export const paymentService = {
     buyerEmail: string;
     buyerName: string;
   }): Promise<InitializePaymentResponse> {
-    const txRef = `GIZAY-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    const txRef = `JEBULO-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     const orderId = doc(collection(db, 'orders')).id;
 
     const commissionRate = 0.12; // 12% platform commission
@@ -298,13 +298,13 @@ export const paymentService = {
     const downloadUrl = await getDownloadURL(fileRef).catch(() => {
       // Return a simulated protected data blob for mock/demo testing
       const dummyBlob = new Blob([
-        `GIZAY DIGITAL PRODUCT DOWNLOAD\n` +
+        `JEBULO DIGITAL PRODUCT DOWNLOAD\n` +
         `Product: ${prod.titleEn}\n` +
         `License: ${prod.licenseType.toUpperCase()}\n` +
         `Authorized Buyer ID: ${params.buyerId}\n` +
         `Order Entitlement: ${entitlementId}\n` +
         `Timestamp: ${new Date().toISOString()}\n\n` +
-        `Thank you for supporting Ethiopian creators on GIZAY!\n`
+        `Thank you for supporting Ethiopian creators on JEBULO!\n`
       ], { type: 'text/plain' });
       return URL.createObjectURL(dummyBlob);
     });

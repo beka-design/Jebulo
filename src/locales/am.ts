@@ -1,8 +1,8 @@
 export const am = {
   common: {
-    brandName: 'GIZAY',
+    brandName: 'JEBULO',
     brandTagline: 'ሁሉንም ዲጂታል በአንድ ቦታ።',
-    brandEthiopicTagline: 'ግዛኝ - የኢትዮጵያ ዲጂታል ምርቶች መገበያያ',
+    brandEthiopicTagline: 'ጀቡሎ - የኢትዮጵያ ዲጂታል ምርቶች መገበያያ',
     home: 'መነሻ',
     explore: 'ምርቶችን ያስሱ',
     categories: 'ምድቦች',
@@ -103,7 +103,7 @@ export const am = {
     fileSize: 'የፋይል መጠን',
     fileType: 'የፋይል አይነት',
     instantDelivery: 'ፈጣን ዲጂታል ርክክብ',
-    safeSecure: 'በ GIZAY ሰርቨር የተጠበቀ ማውረጃ',
+    safeSecure: 'በ JEBULO ሰርቨር የተጠበቀ ማውረጃ',
     description: 'የምርቱ ዝርዝር መግለጫ',
     preview: 'ቅድመ እይታ (Previews)',
     customerReviews: 'የደንበኞች አስተያየት',
@@ -130,7 +130,7 @@ export const am = {
     viewLibrary: 'ወደ ገዛኋቸው ምርቶች ሂድ',
   },
   creator: {
-    applyTitle: 'የዲጂታል ስራዎችዎን በ GIZAY ላይ ይሽጡ',
+    applyTitle: 'የዲጂታል ስራዎችዎን በ JEBULO ላይ ይሽጡ',
     applySubtitle: 'የኢትዮጵያ የፈጠራ ባለቤቶች ማህበረሰብን ይቀላቀሉ። ከሽያጭዎ 88% ያግኙ፣ ገቢዎ በቀጥታ ወደ ቴሌብር ወይም ንግድ ባንክ ሂሳብዎ ይገባል።',
     applyBrandName: 'የፈጣሪ ወይም የድርጅት ስም',
     applyPayoutMethod: 'የገንዘብ መቀበያ ዘዴ',
@@ -168,7 +168,7 @@ export const am = {
     uploadPreviews: 'የቅድመ እይታ ምስሎች/ድምጽ ስቀል',
   },
   admin: {
-    panelTitle: 'የ GIZAY አስተዳዳሪ ፖርታል',
+    panelTitle: 'የ JEBULO አስተዳዳሪ ፖርታል',
     navProducts: 'የምርቶች ግምገማ',
     navCreators: 'የፈጣሪዎች ማመልከቻ',
     navCategories: 'የምድቦች አስተዳደር',
@@ -188,8 +188,8 @@ export const am = {
     markPaid: 'ክፍያው መላኩን አረጋግጥ',
   },
   auth: {
-    signInTitle: 'ወደ GIZAY ግባ',
-    signUpTitle: 'የ GIZAY አካውንት ይክፈቱ',
+    signInTitle: 'ወደ JEBULO ግባ',
+    signUpTitle: 'የ JEBULO አካውንት ይክፈቱ',
     emailLabel: 'ኢሜይል አድራሻ',
     passwordLabel: 'የይለፍ ቃል',
     displayNameLabel: 'ሙሉ ስም',
@@ -200,7 +200,7 @@ export const am = {
     signingUp: 'አካውንት በመፍጠር ላይ...',
   },
   footer: {
-    about: 'GIZAY (ግዛኝ) በኢትዮጵያ ውስጥ ያሉ የፈጠራ ባለቤቶች ዲጂታል ምርቶቻቸውን፣ እውቀታቸውን እና መሳሪያዎቻቸውን ለደንበኞች የሚያቀርቡበት ክፍት የዲጂታል የገበያ ቦታ ነው።',
+    about: 'JEBULO (ጀቡሎ) በኢትዮጵያ ውስጥ ያሉ የፈጠራ ባለቤቶች ዲጂታል ምርቶቻቸውን፣ እውቀታቸውን እና መሳሪያዎቻቸውን ለደንበኞች የሚያቀርቡበት ክፍት የዲጂታል የገበያ ቦታ ነው።',
     quickLinks: 'ጠቃሚ ሊንኮች',
     creatorLinks: 'ፈጣሪዎች',
     legalLinks: 'ህጋዊ እና ደህንነት',

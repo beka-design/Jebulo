@@ -55,7 +55,7 @@ export const SignUpPage: React.FC = () => {
             {t('auth.signUpTitle')}
           </h1>
           <p className="text-xs text-slate-500">
-            Join thousands of creators and buyers on GIZAY (ግዛኝ).
+            Join thousands of creators and buyers on JEBULO (ጀቡሎ).
           </p>
         </div>
 

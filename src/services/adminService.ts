@@ -365,7 +365,7 @@ export const adminService = {
       maxUploadSizeBytes: 250 * 1024 * 1024, // 250MB
       isMaintenanceMode: false,
       allowedFileExtensions: ['.zip', '.pdf', '.epub', '.mp3', '.mp4', '.json', '.dwg', '.rvt', '.xlsx', '.psd', '.ai', '.fig'],
-      contactEmail: 'support@gizay.com',
+      contactEmail: 'support@jebulo.com',
       updatedAt: Date.now(),
     };
     await setDoc(docRef, defaultSettings);

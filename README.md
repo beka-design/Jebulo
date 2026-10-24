@@ -1,9 +1,9 @@
-# GIZAY (ግዛኝ) - Ethiopian Digital Product Marketplace
+# JEBULO (ጀቡሎ) - Ethiopian Digital Product Marketplace
 
 > **"Everything Digital. One Marketplace."**  
-> *ግዛኝ - የኢትዮጵያ ዲጂታል ምርቶች መገበያያ*
+> *ጀቡሎ - የኢትዮጵያ ዲጂታል ምርቶች መገበያያ*
 
-GIZAY is a production-minded, responsive full-stack digital product marketplace built specifically for Ethiopia. It empowers independent creators to sell digital products, e-books, online courses, software, graphic design assets, business spreadsheets, music/audio, architectural CAD/BIM models, and creative resources. Customers purchase securely in Ethiopian Birr (ETB), downloads are protected, and the marketplace retains a configurable **12% commission** on completed sales.
+JEBULO is a production-minded, responsive full-stack digital product marketplace built specifically for Ethiopia. It empowers independent creators to sell digital products, e-books, online courses, software, graphic design assets, business spreadsheets, music/audio, architectural CAD/BIM models, and creative resources. Customers purchase securely in Ethiopian Birr (ETB), downloads are protected, and the marketplace retains a configurable **12% commission** on completed sales.
 
 ---
 
@@ -41,7 +41,7 @@ GIZAY is a production-minded, responsive full-stack digital product marketplace 
 - Switch seamlessly between English and Amharic.
 
 ### B. Creator / Seller
-- Apply to sell on GIZAY via the **Become a Seller** portal (`/become-seller`).
+- Apply to sell on JEBULO via the **Become a Seller** portal (`/become-seller`).
 - Enter payout details: Telebirr mobile number, CBE account number, or Awash Bank account.
 - Sign intellectual property & copyright warranty declaration.
 - Access the **Creator Studio** (`/creator`):
@@ -68,7 +68,7 @@ GIZAY is a production-minded, responsive full-stack digital product marketplace 
 
 ## 3. Financial Ledger & 12% Commission
 
-GIZAY uses a double-entry auditable ledger in Firestore:
+JEBULO uses a double-entry auditable ledger in Firestore:
 - `orders`: Immutable order records with pricing snapshots, applied commission rate (12%), and status.
 - `purchases`: Entitlement records granting customer download access upon verified payment.
 - `creatorLedger`: Auditable credit and debit entries for each sale, commission deduction, and payout.
@@ -102,8 +102,8 @@ VITE_EMULATOR_STORAGE_HOST=localhost
 VITE_EMULATOR_STORAGE_PORT=9199
 
 # Cloudinary Public Assets (Optional)
-VITE_CLOUDINARY_CLOUD_NAME=gizay-demo
-VITE_CLOUDINARY_UPLOAD_PRESET=gizay_public
+VITE_CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+VITE_CLOUDINARY_UPLOAD_PRESET=jebulo_public_uploads
 
 # Backend Functions Configuration (Set in Cloud Functions or functions/.env)
 # CHAPA_SECRET_KEY=CHASECK_TEST-xxxxxxxxxxxxxxxxxxxx
@@ -147,7 +147,7 @@ npm run build
 ## 6. Chapa Payment Integration: Test vs Production Mode
 
 ### Test Mode (Sandbox Simulator)
-In local development and testing, GIZAY includes a built-in Chapa Checkout Simulator (`/checkout/simulator?tx_ref=...`) allowing instant simulation of:
+In local development and testing, JEBULO includes a built-in Chapa Checkout Simulator (`/checkout/simulator?tx_ref=...`) allowing instant simulation of:
 1. Successful Telebirr/CBE payment: triggers verified callback, writes entitlement to Firestore, calculates 12% commission, credits creator ledger, and unlocks download.
 2. Declined/Cancelled payment: marks order failed and prevents entitlement generation.
 
@@ -192,4 +192,4 @@ In local development and testing, GIZAY includes a built-in Chapa Checkout Simul
 
 ## 9. License
 
-Proprietary © 2026 GIZAY. All Rights Reserved.
+Proprietary © 2026 JEBULO. All Rights Reserved.

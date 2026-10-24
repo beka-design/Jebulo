@@ -89,7 +89,7 @@ export const ProductDetailPage: React.FC = () => {
       // Trigger browser download
       const a = document.createElement('a');
       a.href = res.downloadUrl;
-      a.download = res.fileName || 'gizay-digital-package';
+      a.download = res.fileName || 'jebulo-digital-package';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -437,7 +437,7 @@ export const ProductDetailPage: React.FC = () => {
                     rows={4}
                     value={reportDesc}
                     onChange={(e) => setReportDesc(e.target.value)}
-                    placeholder="Provide details about why this product violates GIZAY policies..."
+                    placeholder="Provide details about why this product violates JEBULO policies..."
                     className="w-full text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-2.5"
                   />
                 </div>

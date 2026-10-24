@@ -50,7 +50,7 @@ export const LibraryPage: React.FC = () => {
 
       const a = document.createElement('a');
       a.href = res.downloadUrl;
-      a.download = res.fileName || 'gizay_digital_product';
+      a.download = res.fileName || 'jebulo_digital_product';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -93,7 +93,7 @@ export const LibraryPage: React.FC = () => {
             Your Library is Empty
           </h3>
           <p className="text-sm text-slate-500 max-w-sm mx-auto mt-1 mb-6">
-            You haven’t purchased any digital items yet. Explore thousands of resources on GIZAY.
+            You haven’t purchased any digital items yet. Explore thousands of resources on JEBULO.
           </p>
           <Link to="/explore">
             <Button variant="primary">
