@@ -28,7 +28,9 @@ export const App: React.FC = () => {
             <Route path="/explore" element={<ExplorePage />} />
             <Route path="/products/:productId" element={<ProductDetailPage />} />
             <Route path="/checkout/:productId" element={<CheckoutPage />} />
-            <Route path="/checkout/simulator" element={<CheckoutSimulatorPage />} />
+            {import.meta.env.DEV || import.meta.env.VITE_ENABLE_SIMULATOR === 'true' ? (
+              <Route path="/checkout/simulator" element={<CheckoutSimulatorPage />} />
+            ) : null}
             <Route path="/checkout/callback" element={<CheckoutCallbackPage />} />
             <Route path="/library" element={<LibraryPage />} />
             <Route path="/favorites" element={<FavoritesPage />} />

@@ -1,0 +1,29 @@
+# Cloudflare Workers Configuration for JEBULO Marketplace Backend API
+# Target Architecture: Cloudflare Workers Free Tier
+
+name = "jebulo-api"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# Environment Variables & Bindings
+# Defaults to production fail-closed security posture.
+# For local development, pass --var ENVIRONMENT:development --var ENABLE_CHAPA_SIMULATOR:true
+[vars]
+ENVIRONMENT = "production"
+ENABLE_CHAPA_SIMULATOR = "false"
+FIREBASE_PROJECT_ID = "jebulo-marketplace"
+MARKETPLACE_COMMISSION_RATE = "0.12"
+MIN_PAYOUT_AMOUNT_ETB = "500"
+MAX_COMBINED_PRODUCT_PAYLOAD_BYTES = "11534336" # 11 MiB
+CORS_ALLOWED_ORIGINS = "https://jebulo.com,https://jebulo.pages.dev,http://localhost:5173"
+
+# Note on Secrets:
+# Set production secrets using `wrangler secret put <SECRET_NAME>`:
+# - CHAPA_SECRET_KEY
+# - CHAPA_WEBHOOK_SECRET
+# - B2_APPLICATION_KEY_ID
+# - B2_APPLICATION_KEY
+# - B2_BUCKET_ID
+# - B2_BUCKET_NAME
+# - FIREBASE_SERVICE_ACCOUNT_KEY (JSON string for Firestore REST operations)

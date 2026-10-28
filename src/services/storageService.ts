@@ -1,21 +1,46 @@
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from 'firebase/storage';
-import { storage } from '../lib/firebase';
+/**
+ * JEBULO - Hybrid Storage Service
+ * Handles:
+ * 1. Public promotional media & previews -> Cloudinary (free tier) with fallback
+ * 2. Protected digital product deliverables -> Private Backblaze B2 bucket
+ *    via restricted direct browser uploads (11 MiB limit, magic byte validation)
+ */
+
 import { ProductFileMetadata } from '../types';
+import {
+  validateProductFile,
+  validateCoverImage,
+  UPLOAD_LIMITS,
+} from '../config/uploadPolicy';
+import { apiClient } from './apiClient';
+
+/**
+ * Reads the first 16 bytes of a File to inspect magic bytes / file signature
+ */
+async function readFileHeaderBytes(file: File, numBytes = 16): Promise<Uint8Array> {
+  const slice = file.slice(0, numBytes);
+  const arrayBuffer = await slice.arrayBuffer();
+  return new Uint8Array(arrayBuffer);
+}
 
 export const storageService = {
   /**
    * Upload public media (cover image or previews)
+   * Validates 5 MiB size limit and image magic bytes.
    * If Cloudinary environment variables are present, upload to Cloudinary;
-   * otherwise upload to Firebase Storage 'public/' path.
+   * otherwise fallback to local/storage preview handler.
    */
   async uploadPublicAsset(
     file: File,
     onProgress?: (percent: number) => void
   ): Promise<string> {
+    // 1. Validate cover/preview image
+    const headerBytes = await readFileHeaderBytes(file, 8);
+    const validation = validateCoverImage(file, headerBytes);
+    if (!validation.valid) {
+      throw new Error(validation.error || 'Invalid image file.');
+    }
+
     const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
     const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
@@ -24,100 +49,121 @@ export const storageService = {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', uploadPreset);
-      formData.append('folder', 'gizay_public_previews');
+      formData.append('folder', 'jebulo_public_previews');
 
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`);
 
-      if (!response.ok) {
-        throw new Error(`Cloudinary upload failed: ${response.statusText}`);
-      }
+        xhr.upload.onprogress = (e) => {
+          if (e.lengthComputable && onProgress) {
+            onProgress(Math.round((e.loaded / e.total) * 100));
+          }
+        };
 
-      const data = await response.json();
-      return data.secure_url;
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            const data = JSON.parse(xhr.responseText);
+            resolve(data.secure_url);
+          } else {
+            reject(new Error(`Cloudinary upload failed (${xhr.status}): ${xhr.statusText}`));
+          }
+        };
+
+        xhr.onerror = () => reject(new Error('Network error uploading image to Cloudinary.'));
+        xhr.send(formData);
+      });
     }
 
-    // Fallback to Firebase Storage public assets path
-    const fileExt = file.name.split('.').pop() || '';
-    const safeName = `${Date.now()}_${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
-    const storageRef = ref(storage, `public/assets/${safeName}`);
-    
-    const uploadTask = uploadBytesResumable(storageRef, file, {
-      contentType: file.type,
-      cacheControl: 'public, max-age=31536000',
-    });
-
-    return new Promise((resolve, reject) => {
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          if (onProgress) onProgress(progress);
-        },
-        (error) => reject(error),
-        async () => {
-          const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
-          resolve(downloadUrl);
-        }
-      );
-    });
+    // Local / development fallback: creates an object URL or mock CDN URL
+    if (onProgress) onProgress(100);
+    return URL.createObjectURL(file);
   },
 
   /**
-   * Upload protected paid product file.
-   * Stored in the private bucket path 'protected/products/{productId}/{fileName}'.
-   * NEVER gives a public download URL!
+   * Upload protected paid product file to private Backblaze B2 bucket.
+   * Direct browser upload:
+   * 1. Validates 11 MiB payload limit and magic bytes.
+   * 2. Requests restricted B2 upload authorization from backend.
+   * 3. Uploads binary directly to B2 (bypassing Worker).
+   * 4. Notifies backend to record verified metadata.
    */
   async uploadProtectedProductFile(
     productId: string,
     file: File,
-    onProgress?: (percent: number) => void
+    onProgress?: (percent: number) => void,
+    currentTotalProductBytes = 0
   ): Promise<ProductFileMetadata> {
-    // Validate file size (250MB limit by default)
-    const MAX_SIZE = 250 * 1024 * 1024;
-    if (file.size > MAX_SIZE) {
-      throw new Error('File exceeds the maximum allowed size of 250MB.');
+    // 1. Read file header bytes for signature inspection
+    const headerBytes = await readFileHeaderBytes(file, 16);
+
+    // 2. Validate against 11 MiB combined limit and dangerous executables
+    const validation = validateProductFile(file, headerBytes, currentTotalProductBytes);
+    if (!validation.valid) {
+      throw new Error(validation.error || 'Product file validation failed.');
     }
 
-    const fileExt = file.name.split('.').pop() || '';
-    const safeFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-    const privateStoragePath = `protected/products/${productId}/${Date.now()}_${safeFileName}`;
-    const storageRef = ref(storage, privateStoragePath);
+    const fileExt = file.name.split('.').pop()?.toLowerCase() || '';
 
-    const uploadTask = uploadBytesResumable(storageRef, file, {
-      contentType: file.type || 'application/octet-stream',
-      customMetadata: {
-        productId,
-        originalName: file.name,
-        uploadedAt: Date.now().toString(),
-      },
+    // 3. Request restricted B2 upload authorization from Worker
+    const authData = await apiClient.requestUploadAuthorization({
+      productId,
+      fileName: file.name,
+      fileSizeBytes: file.size,
+      mimeType: file.type || 'application/octet-stream',
     });
 
-    return new Promise((resolve, reject) => {
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          if (onProgress) onProgress(progress);
-        },
-        (error) => reject(error),
-        () => {
-          // Return metadata ONLY (no public download URL!)
-          resolve({
-            fileName: file.name,
-            fileSize: file.size,
-            mimeType: file.type || 'application/octet-stream',
-            fileExtension: fileExt.toLowerCase(),
-            storagePath: privateStoragePath,
-            uploadedAt: Date.now(),
-          });
+    // 4. Direct Browser Upload to B2 (or simulated dev endpoint)
+    await new Promise<void>((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', authData.uploadUrl);
+
+      // Set B2-required headers
+      for (const [headerKey, headerVal] of Object.entries(authData.headers)) {
+        xhr.setRequestHeader(headerKey, headerVal);
+      }
+
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable && onProgress) {
+          const percent = Math.round((e.loaded / e.total) * 100);
+          onProgress(percent);
         }
-      );
+      };
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve();
+        } else {
+          reject(new Error(`Backblaze B2 upload failed with HTTP ${xhr.status}: ${xhr.statusText}`));
+        }
+      };
+
+      xhr.onerror = () => reject(new Error('Network error during direct B2 upload.'));
+      xhr.send(file);
     });
+
+    // 5. Complete upload registration on backend
+    await apiClient.completeUpload({
+      productId,
+      fileName: file.name,
+      storagePath: authData.storagePath,
+      fileSizeBytes: file.size,
+      mimeType: file.type || 'application/octet-stream',
+      fileExtension: fileExt,
+    });
+
+    return {
+      fileName: file.name,
+      fileSize: file.size,
+      mimeType: file.type || 'application/octet-stream',
+      fileExtension: fileExt,
+      storagePath: authData.storagePath,
+      uploadedAt: Date.now(),
+    };
   },
+
+  /**
+   * Max limits reference
+   */
+  limits: UPLOAD_LIMITS,
 };

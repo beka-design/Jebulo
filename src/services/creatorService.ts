@@ -11,6 +11,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { apiClient } from './apiClient';
 import {
   CreatorApplication,
   CreatorProfile,
@@ -182,34 +183,36 @@ export const creatorService = {
     payoutAccountName: string;
     payoutAccountNumber: string;
   }): Promise<string> {
-    // Check available balance first
-    const balance = await this.getCreatorBalance(params.creatorId);
-    if (params.amountEtb <= 0) {
-      throw new Error('Invalid payout amount');
-    }
-    if (params.amountEtb > balance.availableBalanceEtb) {
-      throw new Error(`Requested amount exceeds available balance (${balance.availableBalanceEtb} ETB)`);
-    }
     if (params.amountEtb < 500) {
       throw new Error('Minimum payout request is 500 ETB');
     }
 
-    const docRef = await addDoc(collection(db, 'payoutRequests'), {
-      ...params,
-      status: 'REQUESTED',
-      requestedAt: Date.now(),
-      createdAt: serverTimestamp(),
-    });
+    try {
+      const res = await apiClient.requestPayout({
+        amountEtb: params.amountEtb,
+        payoutMethod: params.payoutMethod,
+        accountNumber: params.payoutAccountNumber,
+        accountName: params.payoutAccountName,
+      });
+      return res.payoutId;
+    } catch (err: any) {
+      console.warn('Backend payout request fallback:', err.message);
 
-    // Mark pending payout in creatorBalances
-    const balanceRef = doc(db, 'creatorBalances', params.creatorId);
-    await updateDoc(balanceRef, {
-      availableBalanceEtb: balance.availableBalanceEtb - params.amountEtb,
-      pendingPayoutEtb: balance.pendingPayoutEtb + params.amountEtb,
-      updatedAt: Date.now(),
-    });
+      // In local dev without running Worker backend, record locally
+      const balance = await this.getCreatorBalance(params.creatorId);
+      if (params.amountEtb > balance.availableBalanceEtb) {
+        throw new Error(`Requested amount exceeds available balance (${balance.availableBalanceEtb} ETB)`);
+      }
 
-    return docRef.id;
+      const docRef = await addDoc(collection(db, 'payoutRequests'), {
+        ...params,
+        status: 'REQUESTED',
+        requestedAt: Date.now(),
+        createdAt: serverTimestamp(),
+      });
+
+      return docRef.id;
+    }
   },
 
   /**

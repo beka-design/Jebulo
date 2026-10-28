@@ -38,7 +38,7 @@ export const CheckoutCallbackPage: React.FC = () => {
         const result = await paymentService.verifyPayment(txRef!);
         if (result.success) {
           setIsSuccess(true);
-          setOrder(result.order);
+          setOrder(result.order || null);
         } else {
           setIsSuccess(false);
           setErrorMsg('Payment verification could not be confirmed.');

@@ -21,6 +21,7 @@ import {
 import { creatorService } from '../services/creatorService';
 import { marketplaceService } from '../services/marketplaceService';
 import { storageService } from '../services/storageService';
+import { validateProductFile, validateCoverImage } from '../config/uploadPolicy';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { LoadingSpinner } from '../components/ui/LoadingSpinner';
@@ -56,6 +57,7 @@ export const CreatorDashboardPage: React.FC = () => {
   const [licenseType, setLicenseType] = useState<'personal' | 'commercial' | 'extended'>('personal');
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [packageFile, setPackageFile] = useState<File | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!currentUser) {
@@ -608,32 +610,67 @@ export const CreatorDashboardPage: React.FC = () => {
               {/* Cover File Upload */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
-                  {t('creator.uploadCover')} *
+                  {t('creator.uploadCover')} * (Max 5 MiB: JPG, PNG, WebP)
                 </label>
                 <input
                   type="file"
-                  accept="image/*"
+                  accept="image/jpeg,image/png,image/webp"
                   required
-                  onChange={(e) => setCoverFile(e.target.files ? e.target.files[0] : null)}
+                  onChange={(e) => {
+                    const file = e.target.files ? e.target.files[0] : null;
+                    if (file) {
+                      const res = validateCoverImage(file);
+                      if (!res.valid) {
+                        setFileError(res.error || 'Invalid cover image');
+                        setCoverFile(null);
+                        return;
+                      }
+                    }
+                    setFileError(null);
+                    setCoverFile(file);
+                  }}
                   className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"
                 />
               </div>
 
               {/* Paid Digital File Upload */}
               <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-2">
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
-                  {t('creator.uploadFiles')} *
-                </label>
+                <div className="flex justify-between items-center">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
+                    {t('creator.uploadFiles')} *
+                  </label>
+                  <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-400">
+                    Max 11 MiB Payload
+                  </span>
+                </div>
                 <input
                   type="file"
                   required
-                  onChange={(e) => setPackageFile(e.target.files ? e.target.files[0] : null)}
+                  onChange={(e) => {
+                    const file = e.target.files ? e.target.files[0] : null;
+                    if (file) {
+                      const res = validateProductFile(file);
+                      if (!res.valid) {
+                        setFileError(res.error || 'Invalid product file');
+                        setPackageFile(null);
+                        return;
+                      }
+                    }
+                    setFileError(null);
+                    setPackageFile(file);
+                  }}
                   className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-700 file:text-white hover:file:bg-emerald-800"
                 />
                 <p className="text-[11px] text-slate-400">
-                  Protected storage. Encrypted and accessible only by customers with verified purchases. (Max 250MB)
+                  Private Backblaze B2 storage. Max 11 MiB combined payload. Supported formats: .zip, .pdf, .epub, .mp3, .wav, .dwg, .xlsx, .json. Multiple files must be packaged in a .zip archive.
                 </p>
               </div>
+
+              {fileError && (
+                <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs font-medium">
+                  {fileError}
+                </div>
+              )}
 
               {uploadProgress !== null && (
                 <div className="space-y-1">
