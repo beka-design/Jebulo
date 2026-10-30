@@ -18,6 +18,11 @@ dist-ssr/
 firebase-debug.log*
 firestore-debug.log*
 ui-debug.log*
+*serviceAccount*.json
+serviceAccountKey.json
+*.serviceAccount.json
+*-firebase-adminsdk-*.json
+*adminsdk*.json
 
 # Environment files
 .env
@@ -25,6 +30,8 @@ ui-debug.log*
 .env.development.local
 .env.test.local
 .env.production.local
+.dev.vars
+.dev.vars.*
 
 # Editor / OS
 .vscode/

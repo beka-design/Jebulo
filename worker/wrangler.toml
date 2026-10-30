@@ -12,7 +12,7 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 ENVIRONMENT = "production"
 ENABLE_CHAPA_SIMULATOR = "false"
-FIREBASE_PROJECT_ID = "jebulo-marketplace"
+FIREBASE_PROJECT_ID = "jebulo-7451a"
 MARKETPLACE_COMMISSION_RATE = "0.12"
 MIN_PAYOUT_AMOUNT_ETB = "500"
 MAX_COMBINED_PRODUCT_PAYLOAD_BYTES = "11534336" # 11 MiB
